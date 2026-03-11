@@ -53,6 +53,13 @@ spec:
               value: "9090"
             - name: REQUEST_TIMEOUT
               value: "5s"
+          resources:
+            requests:
+              cpu: 64m
+              memory: 128Mi
+            limits:
+              cpu: 256m
+              memory: 512Mi
 ---
 apiVersion: v1
 kind: Service
