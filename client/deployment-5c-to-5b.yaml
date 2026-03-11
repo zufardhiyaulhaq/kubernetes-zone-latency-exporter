@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zone-latency-client-5c-to-5b
+  namespace: infrastructure-engineering
+  labels:
+    app: zone-latency-client
+    source-zone: ap-southeast-5c
+    destination-zone: ap-southeast-5b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zone-latency-client
+      source-zone: ap-southeast-5c
+      destination-zone: ap-southeast-5b
+  template:
+    metadata:
+      labels:
+        app: zone-latency-client
+        source-zone: ap-southeast-5c
+        destination-zone: ap-southeast-5b
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: topology.kubernetes.io/zone
+                    operator: In
+                    values:
+                      - ap-southeast-5c
+      containers:
+        - name: zone-latency-client
+          image: zone-latency-client:latest
+          ports:
+            - containerPort: 9090
+              name: metrics
+          env:
+            - name: SOURCE_ZONE
+              value: "ap-southeast-5c"
+            - name: DESTINATION_ZONE
+              value: "ap-southeast-5b"
+            - name: DESTINATION_URL
+              value: "http://podinfo-ap-southeast-5b.infrastructure-engineering.svc.cluster.local:9898"
+            - name: REQUEST_PATH
+              value: "/"
+            - name: REQUEST_METHOD
+              value: "GET"
+            - name: REQUESTS_PER_SECOND
+              value: "10"
+            - name: METRICS_PORT
+              value: "9090"
+            - name: REQUEST_TIMEOUT
+              value: "5s"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zone-latency-client-5c-to-5b
+  namespace: infrastructure-engineering
+  labels:
+    app: zone-latency-client
+    source-zone: ap-southeast-5c
+    destination-zone: ap-southeast-5b
+spec:
+  selector:
+    app: zone-latency-client
+    source-zone: ap-southeast-5c
+    destination-zone: ap-southeast-5b
+  ports:
+    - port: 9090
+      targetPort: metrics
+      name: metrics

@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: zone-latency-client
+  namespace: infrastructure-engineering
+  labels:
+    app: zone-latency-client
+spec:
+  selector:
+    matchLabels:
+      app: zone-latency-client
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s
