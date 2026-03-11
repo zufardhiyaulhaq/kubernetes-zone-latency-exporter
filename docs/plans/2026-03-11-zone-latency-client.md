@@ -410,7 +410,7 @@ metadata:
     source-zone: ap-southeast-{SRC}
     destination-zone: ap-southeast-{DST}
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: zone-latency-client

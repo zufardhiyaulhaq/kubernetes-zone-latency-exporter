@@ -8,7 +8,7 @@ metadata:
     source-zone: ap-southeast-5a
     destination-zone: ap-southeast-5b
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: zone-latency-client
@@ -32,7 +32,7 @@ spec:
                       - ap-southeast-5a
       containers:
         - name: zone-latency-client
-          image: zone-latency-client:latest
+          image: ghcr.io/zufardhiyaulhaq/kubernetes-zone-latency-exporter:main
           ports:
             - containerPort: 9090
               name: metrics
