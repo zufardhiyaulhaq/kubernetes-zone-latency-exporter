@@ -48,7 +48,7 @@ spec:
             - name: REQUEST_METHOD
               value: "GET"
             - name: REQUESTS_PER_SECOND
-              value: "10"
+              value: "20"
             - name: METRICS_PORT
               value: "9090"
             - name: REQUEST_TIMEOUT
