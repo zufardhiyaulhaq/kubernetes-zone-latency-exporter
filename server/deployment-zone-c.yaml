@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: podinfo-ap-southeast-5c
+  namespace: infrastructure-engineering
+  labels:
+    app: podinfo
+    zone: ap-southeast-5c
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: podinfo
+      zone: ap-southeast-5c
+  template:
+    metadata:
+      labels:
+        app: podinfo
+        zone: ap-southeast-5c
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: topology.kubernetes.io/zone
+                    operator: In
+                    values:
+                      - ap-southeast-5c
+      containers:
+        - name: podinfo
+          image: ghcr.io/stefanprodan/podinfo:latest
+          ports:
+            - containerPort: 9898
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: podinfo-ap-southeast-5c
+  namespace: infrastructure-engineering
+  labels:
+    app: podinfo
+    zone: ap-southeast-5c
+spec:
+  selector:
+    app: podinfo
+    zone: ap-southeast-5c
+  ports:
+    - port: 9898
+      targetPort: http
+      name: http
