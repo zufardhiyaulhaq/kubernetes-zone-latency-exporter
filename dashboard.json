@@ -46,7 +46,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "$datasource" },
-          "expr": "histogram_quantile(0.50, sum(rate(zone_latency_request_duration_seconds_bucket{cluster_name=\"$cluster_name\"}[$__rate_interval])) by (source_zone, destination_zone, le))",
+          "expr": "histogram_quantile(0.50, sum(rate(zone_latency_request_duration_seconds_bucket{cluster_name=\"$cluster_name\", namespace=\"$namespace\"}[$__rate_interval])) by (source_zone, destination_zone, le))",
           "legendFormat": "{{source_zone}} → {{destination_zone}}",
           "refId": "A"
         }
@@ -77,7 +77,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "$datasource" },
-          "expr": "histogram_quantile(0.99, sum(rate(zone_latency_request_duration_seconds_bucket{cluster_name=\"$cluster_name\"}[$__rate_interval])) by (source_zone, destination_zone, le))",
+          "expr": "histogram_quantile(0.99, sum(rate(zone_latency_request_duration_seconds_bucket{cluster_name=\"$cluster_name\", namespace=\"$namespace\"}[$__rate_interval])) by (source_zone, destination_zone, le))",
           "legendFormat": "{{source_zone}} → {{destination_zone}}",
           "refId": "A"
         }
@@ -108,7 +108,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "$datasource" },
-          "expr": "histogram_quantile(0.999, sum(rate(zone_latency_request_duration_seconds_bucket{cluster_name=\"$cluster_name\"}[$__rate_interval])) by (source_zone, destination_zone, le))",
+          "expr": "histogram_quantile(0.999, sum(rate(zone_latency_request_duration_seconds_bucket{cluster_name=\"$cluster_name\", namespace=\"$namespace\"}[$__rate_interval])) by (source_zone, destination_zone, le))",
           "legendFormat": "{{source_zone}} → {{destination_zone}}",
           "refId": "A"
         }
@@ -139,7 +139,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "$datasource" },
-          "expr": "sum(rate(zone_latency_requests_total{cluster_name=\"$cluster_name\"}[$__rate_interval])) by (source_zone, destination_zone)",
+          "expr": "sum(rate(zone_latency_requests_total{cluster_name=\"$cluster_name\", namespace=\"$namespace\"}[$__rate_interval])) by (source_zone, destination_zone)",
           "legendFormat": "{{source_zone}} → {{destination_zone}}",
           "refId": "A"
         }
@@ -170,7 +170,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "$datasource" },
-          "expr": "sum(rate(zone_latency_request_errors_total{cluster_name=\"$cluster_name\"}[$__rate_interval])) by (source_zone, destination_zone)",
+          "expr": "sum(rate(zone_latency_request_errors_total{cluster_name=\"$cluster_name\", namespace=\"$namespace\"}[$__rate_interval])) by (source_zone, destination_zone)",
           "legendFormat": "{{source_zone}} → {{destination_zone}}",
           "refId": "A"
         }
@@ -201,7 +201,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "$datasource" },
-          "expr": "sum(zone_latency_requests_in_flight{cluster_name=\"$cluster_name\"}) by (source_zone, destination_zone)",
+          "expr": "sum(zone_latency_requests_in_flight{cluster_name=\"$cluster_name\", namespace=\"$namespace\"}) by (source_zone, destination_zone)",
           "legendFormat": "{{source_zone}} → {{destination_zone}}",
           "refId": "A"
         }
@@ -250,7 +250,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "$datasource" },
-          "expr": "histogram_quantile(0.50, sum(rate(zone_latency_request_duration_seconds_bucket{cluster_name=\"$cluster_name\"}[$__rate_interval])) by (source_zone, destination_zone, le))",
+          "expr": "histogram_quantile(0.50, sum(rate(zone_latency_request_duration_seconds_bucket{cluster_name=\"$cluster_name\", namespace=\"$namespace\"}[$__rate_interval])) by (source_zone, destination_zone, le))",
           "legendFormat": "",
           "format": "table",
           "instant": true,
@@ -292,6 +292,26 @@
         "query": {
           "qryType": 1,
           "query": "label_values(kube_deployment_metadata_generation, cluster_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(kube_deployment_metadata_generation{cluster_name=\"$cluster_name\"}, namespace)",
+        "includeAll": false,
+        "label": "Namespace",
+        "name": "namespace",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(kube_deployment_metadata_generation{cluster_name=\"$cluster_name\"}, namespace)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
